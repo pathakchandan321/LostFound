@@ -1,0 +1,107 @@
+/* Global styling */
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #f3f6fa;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+/* Centered container */
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* Buttons */
+button {
+    background: #0066cc;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    margin-top: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover {
+    background: #004d99;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+th {
+    background: #2c3e50;
+    color: white;
+    padding: 10px;
+}
+td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Forms */
+input, textarea {
+    width: 96%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+textarea {
+    height: 80px;
+}
+
+form {
+    width: 80%;
+    margin: auto;
+}
+
+/* Navbar */
+.navbar {
+    text-align: center;
+    padding: 15px;
+    background: #2c3e50;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+.navbar a {
+    color: white;
+    margin: 0 15px;
+}
+.navbar a:hover {
+    color: #87cefa;
+}
+
+/* Back link */
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    color: #2c3e50;
+}

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"><title>Report Found</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h2>Report Found Item</h2>
+<form th:action="@{/report-found}" method="post" enctype="multipart/form-data">
+    Name: <input type="text" name="reporterName" /><br/>
+    Item name: <input type="text" name="itemName" /><br/>
+    Location: <input type="text" name="location" /><br/>
+    Description: <textarea name="description"></textarea><br/>
+    Image: <input type="file" name="image"/><br/>
+    <button type="submit">Submit</button>
+</form>
+<a href="/">Home</a>
+</body>
+</html>

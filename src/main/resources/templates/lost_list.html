@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Lost Items</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<h2>Lost Items</h2>
+
+<form method="get" action="/lost-items">
+    <input type="text" name="q" placeholder="search by name or location"/>
+    <button>Search</button>
+</form>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Item</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Image</th>
+        <th>Action</th>
+    </tr>
+
+    <!-- LOOP STARTS HERE -->
+    <tr th:each="it : ${lostItems}">
+        <td th:text="${it.id}"></td>
+        <td th:text="${it.itemName}"></td>
+        <td th:text="${it.location}"></td>
+        <td th:text="${it.status}"></td>
+
+        <!-- IMAGE COLUMN -->
+        <td>
+            <!-- show image only if exists -->
+            <img th:if="${it.imagePath != null}"
+                 th:src="@{'/uploads/' + ${it.imagePath}}"
+                 width="100" height="80"
+                 alt="Image">
+
+            <!-- Fallback if no image -->
+            <span th:if="${it.imagePath == null}">No Image</span>
+        </td>
+
+        <td>
+            <a href="/report-found">If found, report</a>
+        </td>
+    </tr>
+</table>
+
+<a href="/">Home</a>
+</body>
+</html>

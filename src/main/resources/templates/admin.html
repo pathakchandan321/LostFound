@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Admin Dashboard</h1>
+
+<h2>Lost Items</h2>
+<ul>
+    <li th:each="item : ${lost}">
+        <span th:text="${item.itemName}"></span> -
+        <span th:text="${item.status}"></span>
+    </li>
+</ul>
+
+<h2>Found Items</h2>
+<ul>
+    <li th:each="item : ${found}">
+        <span th:text="${item.itemName}"></span> -
+        <span th:text="${item.status}"></span>
+    </li>
+</ul>
+
+<h2>Claims</h2>
+<ul>
+    <li th:each="c : ${claims}">
+        Claim ID: <span th:text="${c.id}"></span> -
+        Status: <span th:text="${c.status}"></span>
+    </li>
+</ul>
+
+<a href="/">Back to Home</a>
+
+</body>
+</html>

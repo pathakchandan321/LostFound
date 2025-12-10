@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"><title>Claims</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h2>Claims</h2>
+<table border="1">
+    <tr><th>ID</th><th>Lost</th><th>Found</th><th>Claimant</th><th>Status</th><th>Action</th></tr>
+    <tr th:each="c : ${claims}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.lostItem != null ? c.lostItem.itemName : 'N/A'}"></td>
+        <td th:text="${c.foundItem != null ? c.foundItem.itemName : 'N/A'}"></td>
+        <td th:text="${c.claimant.name}"></td>
+        <td th:text="${c.status}"></td>
+        <td>
+            <form th:action="@{|/admin/claim/${c.id}/approve|}" method="post" style="display:inline;">
+                <button type="submit">Approve</button>
+            </form>
+            <form th:action="@{|/admin/claim/${c.id}/reject|}" method="post" style="display:inline;">
+                <button type="submit">Reject</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<a href="/">Home</a>
+</body>
+</html>

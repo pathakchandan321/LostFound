@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"><title>Found Items</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h2>Found Items</h2>
+<form method="get" action="/found-items">
+    <input type="text" name="q" placeholder="search by name or location"/>
+    <button>Search</button>
+</form>
+<table border="1">
+    <tr><th>ID</th><th>Item</th><th>Location</th><th>Status</th><th>Action</th></tr>
+    <tr th:each="it : ${foundItems}">
+        <td th:text="${it.id}"></td>
+        <td th:text="${it.itemName}"></td>
+        <td th:text="${it.location}"></td>
+        <td th:text="${it.status}"></td>
+        <td>
+            <form th:action="@{/claim}" method="post">
+                <input type="hidden" name="foundId" th:value="${it.id}" />
+                Lost item id to claim: <input type="text" name="lostId" />
+                Your name: <input type="text" name="claimantName" />
+                <button type="submit">Claim</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<a href="/">Home</a>
+</body>
+</html>
