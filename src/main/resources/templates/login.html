@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+<h2>Login</h2>
+
+<!-- Error message -->
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<!-- Success message (after register or logout) -->
+<p th:if="${success}" th:text="${success}" style="color:green;"></p>
+
+<!-- Spring Security processes this POST automatically -->
+<form th:action="@{/api/login}" method="post">
+    <label>Username:</label>
+    <input type="text" name="username" required /><br/><br/>
+
+    <label>Password:</label>
+    <input type="password" name="password" required /><br/><br/>
+
+    <button type="submit">Login</button>
+</form>
+
+<br/>
+<a href="/api/register">Don't have an account? Register</a>
+</div>
+</body>
+</html>

@@ -6,33 +6,63 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/claims">Claims</a>
+    <a href="/swagger-ui.html">Swagger</a>
+</div>
 <h1>Admin Dashboard</h1>
 
 <h2>Lost Items</h2>
-<ul>
-    <li th:each="item : ${lost}">
-        <span th:text="${item.itemName}"></span> -
-        <span th:text="${item.status}"></span>
-    </li>
-</ul>
+<table>
+    <tr><th>Item</th><th>Status</th><th>Action</th></tr>
+    <tr th:each="item : ${lost}">
+        <td th:text="${item.itemName}"></td>
+        <td th:text="${item.status}"></td>
+        <td>
+            <form th:action="@{|/admin/lost/${item.id}/delete|}" method="post"><button type="submit">Delete</button></form>
+        </td>
+    </tr>
+</table>
 
 <h2>Found Items</h2>
-<ul>
-    <li th:each="item : ${found}">
-        <span th:text="${item.itemName}"></span> -
-        <span th:text="${item.status}"></span>
-    </li>
-</ul>
+<table>
+    <tr><th>Item</th><th>Status</th><th>Action</th></tr>
+    <tr th:each="item : ${found}">
+        <td th:text="${item.itemName}"></td>
+        <td th:text="${item.status}"></td>
+        <td>
+            <form th:action="@{|/admin/found/${item.id}/delete|}" method="post"><button type="submit">Delete</button></form>
+        </td>
+    </tr>
+</table>
 
 <h2>Claims</h2>
-<ul>
-    <li th:each="c : ${claims}">
-        Claim ID: <span th:text="${c.id}"></span> -
-        Status: <span th:text="${c.status}"></span>
-    </li>
-</ul>
+<table>
+    <tr><th>ID</th><th>Status</th><th>Action</th></tr>
+    <tr th:each="c : ${claims}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.status}"></td>
+        <td>
+            <form th:action="@{|/admin/claim/${c.id}/approve|}" method="post" style="display:inline;"><button type="submit">Approve</button></form>
+            <form th:action="@{|/admin/claim/${c.id}/reject|}" method="post" style="display:inline;"><button type="submit">Reject</button></form>
+            <form th:action="@{|/admin/claim/${c.id}/delete|}" method="post" style="display:inline;"><button type="submit">Delete</button></form>
+        </td>
+    </tr>
+</table>
 
-<a href="/">Back to Home</a>
+<h2>Users</h2>
+<table>
+    <tr><th>Username</th><th>Email</th><th>Role</th><th>Action</th></tr>
+    <tr th:each="u : ${users}">
+        <td th:text="${u.username}"></td>
+        <td th:text="${u.email}"></td>
+        <td th:text="${u.role}"></td>
+        <td>
+            <form th:if="${u.username != 'admin'}" th:action="@{|/admin/user/${u.id}/delete|}" method="post"><button type="submit">Delete</button></form>
+        </td>
+    </tr>
+</table>
 
 </body>
 </html>

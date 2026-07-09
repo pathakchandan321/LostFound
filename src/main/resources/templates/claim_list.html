@@ -5,6 +5,10 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/admin">Admin</a>
+</div>
 <h2>Claims</h2>
 <table border="1">
     <tr><th>ID</th><th>Lost</th><th>Found</th><th>Claimant</th><th>Status</th><th>Action</th></tr>
@@ -12,7 +16,7 @@
         <td th:text="${c.id}"></td>
         <td th:text="${c.lostItem != null ? c.lostItem.itemName : 'N/A'}"></td>
         <td th:text="${c.foundItem != null ? c.foundItem.itemName : 'N/A'}"></td>
-        <td th:text="${c.claimant.name}"></td>
+        <td th:text="${c.claimant != null ? c.claimant.username : 'N/A'}"></td>
         <td th:text="${c.status}"></td>
         <td>
             <form th:action="@{|/admin/claim/${c.id}/approve|}" method="post" style="display:inline;">

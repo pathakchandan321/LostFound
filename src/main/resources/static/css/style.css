@@ -12,6 +12,20 @@ h1, h2 {
     color: #2c3e50;
 }
 
+.lead {
+    text-align: center;
+    font-size: 17px;
+    color: #52616f;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 24px 0;
+}
+
 /* Centered container */
 .container {
     max-width: 800px;
@@ -30,6 +44,18 @@ a {
 }
 a:hover {
     text-decoration: underline;
+}
+
+.button-link {
+    display: inline-block;
+    background: #0066cc;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+}
+
+.button-link.secondary {
+    background: #2c3e50;
 }
 
 /* Buttons */
@@ -66,7 +92,7 @@ td {
 }
 
 /* Forms */
-input, textarea {
+input, textarea, select {
     width: 96%;
     padding: 8px;
     margin-bottom: 10px;
@@ -81,6 +107,23 @@ textarea {
 form {
     width: 80%;
     margin: auto;
+}
+
+td form {
+    width: 100%;
+}
+
+.chatbot {
+    border-top: 1px solid #dde5ef;
+    margin-top: 24px;
+    padding-top: 16px;
+}
+
+.answer {
+    background: #eef6ff;
+    border-left: 4px solid #0066cc;
+    padding: 12px;
+    border-radius: 6px;
 }
 
 /* Navbar */

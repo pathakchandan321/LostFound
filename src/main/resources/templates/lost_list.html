@@ -7,6 +7,12 @@
 </head>
 
 <body>
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/User/report-lost">Report Lost Item</a>
+    <a href="/found-items">Found Items</a>
+</div>
+
 <h2>Lost Items</h2>
 
 <form method="get" action="/lost-items">
@@ -16,9 +22,9 @@
 
 <table border="1">
     <tr>
-        <th>ID</th>
         <th>Item</th>
         <th>Location</th>
+        <th>Description</th>
         <th>Status</th>
         <th>Image</th>
         <th>Action</th>
@@ -26,9 +32,9 @@
 
     <!-- LOOP STARTS HERE -->
     <tr th:each="it : ${lostItems}">
-        <td th:text="${it.id}"></td>
-        <td th:text="${it.itemName}"></td>
+        <td><strong th:text="${it.itemName}"></strong><br><small>ID: <span th:text="${it.id}"></span></small></td>
         <td th:text="${it.location}"></td>
+        <td th:text="${it.description}"></td>
         <td th:text="${it.status}"></td>
 
         <!-- IMAGE COLUMN -->
@@ -44,11 +50,9 @@
         </td>
 
         <td>
-            <a href="/report-found">If found, report</a>
+            <a th:href="@{/User/report-found}">If found, report</a>
         </td>
     </tr>
 </table>
-
-<a href="/">Home</a>
 </body>
 </html>

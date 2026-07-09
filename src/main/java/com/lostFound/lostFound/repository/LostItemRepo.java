@@ -8,4 +8,5 @@ import java.util.List;
 public interface LostItemRepo extends JpaRepository<LostItem, Long> {
     List<LostItem> findByStatus(String status);
     List<LostItem> findByItemNameContainingIgnoreCaseOrLocationContainingIgnoreCase(String name, String location);
+    List<LostItem> findByItemNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrLocationContainingIgnoreCase(String name, String description, String location);
 }

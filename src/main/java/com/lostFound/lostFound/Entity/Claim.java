@@ -8,10 +8,15 @@ public class Claim {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne private LostItem lostItem;
-    @ManyToOne private FoundItem foundItem;
-    @ManyToOne private User claimant;
+    @ManyToOne
+    private LostItem lostItem;
+    @ManyToOne
+    private FoundItem foundItem;
+    @ManyToOne
+    private User claimant;
 
+    @Column(length = 1000)
+    private String message;
     private String status = "PENDING"; // PENDING, APPROVED, REJECTED
     private LocalDateTime claimedAt = LocalDateTime.now();
 
@@ -53,6 +58,14 @@ public class Claim {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public LocalDateTime getClaimedAt() {

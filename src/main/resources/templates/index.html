@@ -1,23 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <title>Lost & Found</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-
 <div class="navbar">
-    <a href="/report-lost">Report Lost Item</a>
-    <a href="/report-found">Report Found Item</a>
+
+    <a href="/User/report-lost">Report Lost Item</a>
+    <a href="/User/report-found">Report Found Item</a>
     <a href="/lost-items">Lost Items</a>
     <a href="/found-items">Found Items</a>
     <a href="/claims">Claims</a>
     <a href="/admin">Admin</a>
+
+    <!-- 🔓 Agar user NOT logged in -->
+    <span sec:authorize="isAnonymous()">
+        <a th:href="@{/api/register}">SignUp</a>
+        <a th:href="@{/api/login}">Login</a>
+    </span>
+
+    <!-- 🔐 Agar user logged in hai -->
+    <span sec:authorize="isAuthenticated()">
+        <form th:action="@{/api/logout}" method="post" style="display:inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </span>
+
 </div>
 
 <div class="container">
     <h1>Welcome to Lost & Found Portal</h1>
+    <p class="lead">Post lost and found items, search campus reports, and track claims until an item is returned.</p>
+
+    <div class="actions">
+        <a class="button-link" href="/User/report-lost">Report Lost</a>
+        <a class="button-link" href="/User/report-found">Report Found</a>
+        <a class="button-link secondary" href="/found-items">Search Found Items</a>
+    </div>
+
+    <section class="chatbot">
+        <h2>Help Chatbot</h2>
+        <form th:action="@{/chat}" method="post">
+            <input type="text" name="message" placeholder="Ask how to report, claim, or track an item" required />
+            <button type="submit">Ask</button>
+        </form>
+        <p th:if="${chatAnswer != null}" class="answer" th:text="${chatAnswer}"></p>
+    </section>
 </div>
 
 </body>

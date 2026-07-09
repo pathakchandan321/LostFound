@@ -15,20 +15,17 @@
 <div class="container">
     <h2>Report Lost Item</h2>
 
-    <form th:action="@{/report-lost}" method="post" enctype="multipart/form-data">
-        <label>Name:</label>
-        <input type="text" name="reporterName" />
-
+    <form th:action="@{/User/report-lost}" method="post" enctype="multipart/form-data">
         <label>Item name:</label>
-        <input type="text" name="itemName" />
+        <input type="text" name="itemName" required />
 
         <label>Location:</label>
-        <input type="text" name="location" />
+        <input type="text" name="location" required />
 
         <label>Description:</label>
-        <textarea name="description"></textarea>
+        <textarea name="description" required></textarea>
 
-        <label>Image:</label>
+        <label>Image (optional):</label>
         <input type="file" name="image"/>
 
         <button type="submit">Submit</button>

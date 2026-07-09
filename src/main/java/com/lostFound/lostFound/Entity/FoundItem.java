@@ -1,18 +1,23 @@
 package com.lostFound.lostFound.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
 public class FoundItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private String itemName;
-    @Column(length=1000) private String description;
+    @NotBlank
+    @Column(length=1000)
+    private String description;
+    @NotBlank
     private String location;
     private LocalDate dateFound;
     private String imagePath;
-    private String status = "PENDING"; // PENDING, MATCHED, RETURNED
+    private String status = "FOUND"; // FOUND, MATCHED, CLAIMED, RETURNED
 
     @ManyToOne
     private User reporter;
