@@ -1,63 +1,19 @@
 package com.lostFound.lostFound.configuration;
 
-import com.lostFound.lostFound.Entity.FoundItem;
-import com.lostFound.lostFound.Entity.LostItem;
-import com.lostFound.lostFound.Entity.User;
-import com.lostFound.lostFound.repository.FoundItemRepo;
-import com.lostFound.lostFound.repository.LostItemRepo;
-import com.lostFound.lostFound.repository.UserRepo;
+import com.lostFound.lostFound.Entity.*;
+import com.lostFound.lostFound.repository.*;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Configuration
 public class DataSeeder {
-    @Bean
-    CommandLineRunner seedData(UserRepo userRepo, LostItemRepo lostRepo,
-                               FoundItemRepo foundRepo, PasswordEncoder passwordEncoder) {
-        return args -> {
-            User admin = userRepo.findByUsername("admin").orElseGet(() -> {
-                User user = new User();
-                user.setUsername("admin");
-                user.setEmail("admin@college.local");
-                user.setPassword(passwordEncoder.encode("admin123"));
-                user.setRole("ADMIN");
-                return userRepo.save(user);
-            });
-
-            User student = userRepo.findByUsername("student").orElseGet(() -> {
-                User user = new User();
-                user.setUsername("student");
-                user.setEmail("student@college.local");
-                user.setPassword(passwordEncoder.encode("student123"));
-                user.setRole("USER");
-                return userRepo.save(user);
-            });
-
-            if (lostRepo.count() == 0) {
-                LostItem bottle = new LostItem();
-                bottle.setItemName("Blue Water Bottle");
-                bottle.setDescription("Steel bottle with a name sticker near the cap.");
-                bottle.setLocation("Library second floor");
-                bottle.setDateLost(LocalDate.now().minusDays(2));
-                bottle.setStatus("LOST");
-                bottle.setReporter(student);
-                lostRepo.save(bottle);
-            }
-
-            if (foundRepo.count() == 0) {
-                FoundItem keys = new FoundItem();
-                keys.setItemName("Keychain with two keys");
-                keys.setDescription("Black keychain found after morning class.");
-                keys.setLocation("Computer lab");
-                keys.setDateFound(LocalDate.now().minusDays(1));
-                keys.setStatus("FOUND");
-                keys.setReporter(admin);
-                foundRepo.save(keys);
-            }
-        };
-    }
+ @Bean CommandLineRunner seedData(UserRepo users,LostItemRepo lost,FoundItemRepo found,PasswordEncoder encoder){return args->{
+  User admin=users.findByUsername("admin").orElseGet(()->{User u=new User();u.setUsername("admin");u.setEmail("admin@college.local");u.setPassword(encoder.encode("admin123"));u.setRole("ADMIN");return users.save(u);});
+  User student=users.findByUsername("student").orElseGet(()->{User u=new User();u.setUsername("student");u.setEmail("student@college.local");u.setPassword(encoder.encode("student123"));u.setRole("USER");return users.save(u);});
+  if(lost.count()==0){LostItem item=new LostItem();item.setItemName("Blue Water Bottle");item.setDescription("Steel bottle with a name sticker near the cap.");item.setCategory("Personal item");item.setLocation("Library second floor");item.setOccurredAt(LocalDateTime.now().minusDays(2));item.setDateLost(LocalDate.now().minusDays(2));item.setReporter(student);lost.save(item);}
+  if(found.count()==0){FoundItem item=new FoundItem();item.setItemName("Blue Water Bottle");item.setDescription("Steel bottle found after morning class.");item.setCategory("Personal item");item.setLocation("Library second floor");item.setPrivateDetails("Silver cap with initials CP and a small dent beside the handle.");item.setOccurredAt(LocalDateTime.now().minusDays(1));item.setDateFound(LocalDate.now().minusDays(1));item.setReporter(admin);found.save(item);}
+ };}
 }

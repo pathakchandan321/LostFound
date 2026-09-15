@@ -5,77 +5,23 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Claim {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    private LostItem lostItem;
-    @ManyToOne
-    private FoundItem foundItem;
-    @ManyToOne
-    private User claimant;
-
-    @Column(length = 1000)
-    private String message;
-    private String status = "PENDING"; // PENDING, APPROVED, REJECTED
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @ManyToOne(optional = false) private ItemMatch itemMatch;
+    @ManyToOne(optional = false) private User claimant;
+    @Column(length = 3000) private String verificationQuestions;
+    @Column(length = 5000) private String verificationAnswers;
+    private double verificationScore;
+    private String status = "VERIFICATION_PENDING";
     private LocalDateTime claimedAt = LocalDateTime.now();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LostItem getLostItem() {
-        return lostItem;
-    }
-
-    public void setLostItem(LostItem lostItem) {
-        this.lostItem = lostItem;
-    }
-
-    public FoundItem getFoundItem() {
-        return foundItem;
-    }
-
-    public void setFoundItem(FoundItem foundItem) {
-        this.foundItem = foundItem;
-    }
-
-    public User getClaimant() {
-        return claimant;
-    }
-
-    public void setClaimant(User claimant) {
-        this.claimant = claimant;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public LocalDateTime getClaimedAt() {
-        return claimedAt;
-    }
-
-    public void setClaimedAt(LocalDateTime claimedAt) {
-        this.claimedAt = claimedAt;
-    }
-
-    // getters & setters
+    public Long getId(){return id;}
+    public ItemMatch getItemMatch(){return itemMatch;} public void setItemMatch(ItemMatch v){itemMatch=v;}
+    public LostItem getLostItem(){return itemMatch == null ? null : itemMatch.getLostItem();}
+    public FoundItem getFoundItem(){return itemMatch == null ? null : itemMatch.getFoundItem();}
+    public User getClaimant(){return claimant;} public void setClaimant(User v){claimant=v;}
+    public String getVerificationQuestions(){return verificationQuestions;} public void setVerificationQuestions(String v){verificationQuestions=v;}
+    public String getVerificationAnswers(){return verificationAnswers;} public void setVerificationAnswers(String v){verificationAnswers=v;}
+    public String getMessage(){return verificationAnswers;}
+    public double getVerificationScore(){return verificationScore;} public void setVerificationScore(double v){verificationScore=v;}
+    public String getStatus(){return status;} public void setStatus(String v){status=v;}
+    public LocalDateTime getClaimedAt(){return claimedAt;}
 }
-

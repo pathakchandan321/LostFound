@@ -11,7 +11,7 @@
     <a href="/lost-items">Lost Items</a>
 </div>
 <h2>Found Items</h2>
-<form method="get" action="/found-items">
+<form method="get" action="/found-items"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="text" name="q" placeholder="search by name or location"/>
     <button>Search</button>
 </form>
@@ -27,7 +27,7 @@
             <span th:if="${it.imagePath == null}">No Image</span>
         </td>
         <td>
-            <form th:action="@{/claim}" method="post">
+            <form th:action="@{/claim}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <input type="hidden" name="foundId" th:value="${it.id}" />
                 <label>Lost item</label>
                 <select name="lostId" required>

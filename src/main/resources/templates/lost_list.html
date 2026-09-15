@@ -15,7 +15,7 @@
 
 <h2>Lost Items</h2>
 
-<form method="get" action="/lost-items">
+<form method="get" action="/lost-items"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <input type="text" name="q" placeholder="search by name or location"/>
     <button>Search</button>
 </form>

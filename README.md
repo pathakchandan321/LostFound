@@ -4,11 +4,11 @@ A Spring Boot + Thymeleaf application for students to report lost items, post fo
 
 ## Tech Stack
 
-- Java 21, Spring Boot 4
+- Java 25 or newer, Spring Boot 4
 - Spring MVC REST APIs and Thymeleaf UI
 - Spring Security with BCrypt password hashing
 - Spring Data JPA + Hibernate
-- MySQL
+- H2 by default, with an optional MySQL profile
 - Swagger UI through springdoc-openapi
 
 ## Features
@@ -24,30 +24,35 @@ A Spring Boot + Thymeleaf application for students to report lost items, post fo
 - Status tracking: `LOST`, `FOUND`, `MATCHED`, `CLAIMED`, `RETURNED`
 - Global REST exception handling and validation DTOs
 
-## Setup
+## Run
 
-1. Create the database:
-
-```sql
-CREATE DATABASE lost_found_db;
-```
-
-2. Configure database credentials in `src/main/resources/application.properties`, or set `DB_PASSWORD`:
-
-```powershell
-$env:DB_PASSWORD="your_mysql_password"
-```
-
-3. Run the app:
+Open a new PowerShell terminal after setting up Java, then run:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-4. Open:
+The default configuration uses an in-memory H2 database, so no database server or credentials are required. Open `http://localhost:8080/home` after startup.
 
-- UI: `http://localhost:8080/home`
-- Swagger: `http://localhost:8080/swagger-ui.html`
+To build an executable JAR:
+
+```powershell
+.\mvnw.cmd package
+java -jar target\lostFound-0.0.1-SNAPSHOT.jar
+```
+
+## MySQL (optional)
+
+Create the database, supply credentials, and enable the profile:
+
+```sql
+CREATE DATABASE lost_found_db;
+```
+
+```powershell
+$env:DB_PASSWORD="your_mysql_password"
+.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=mysql
+```
 
 ## Sample Accounts
 
@@ -62,7 +67,7 @@ The app seeds these accounts on first startup:
 - `GET /api/lost-items`
 - `POST /api/lost-items` with multipart form fields `itemName`, `description`, `location`, optional `image`
 - `GET /api/found-items`
-- `POST /api/found-items` with multipart form fields `itemName`, `description`, `location`, `image`
+- `POST /api/found-items` with multipart form fields `itemName`, `description`, `location`, optional `image`
 - `POST /api/claims`
 - `POST /api/admin/claims/{id}/approve`
 - `POST /api/admin/claims/{id}/reject`
@@ -71,7 +76,3 @@ The app seeds these accounts on first startup:
 ## Uploads
 
 Images are stored in the local `uploads/` folder and served from `/uploads/{fileName}`.
-
-## Database Schema
-
-Hibernate can create/update tables automatically through `spring.jpa.hibernate.ddl-auto=update`. A reference schema is also provided in `src/main/resources/schema.sql`.

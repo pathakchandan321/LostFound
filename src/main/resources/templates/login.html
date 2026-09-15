@@ -16,7 +16,7 @@
 <p th:if="${success}" th:text="${success}" style="color:green;"></p>
 
 <!-- Spring Security processes this POST automatically -->
-<form th:action="@{/api/login}" method="post">
+<form th:action="@{/api/login}" method="post"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <label>Username:</label>
     <input type="text" name="username" required /><br/><br/>
 
