@@ -7,6 +7,7 @@ import com.lostFound.lostFound.exception.ResourceNotFoundException;
 import com.lostFound.lostFound.repository.FoundItemRepo;
 import com.lostFound.lostFound.repository.LostItemRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -27,28 +28,34 @@ public class ItemService {
         this.matchingService = matchingService;
     }
 
+    @Transactional
     public LostItem createLost(LostItem item, MultipartFile image, User reporter) {
         item.setReporter(reporter);
         item.setDateLost(LocalDate.now());
         item.setStatus("LOST");
         item.setImagePath(fileStorageService.store(image));
         LostItem saved = lostRepo.save(item);
-        if (!matchingService.findMatchesForLost(saved).isEmpty()) {
+        List<FoundItem> matches = matchingService.findMatchesForLost(saved);
+        if (!matches.isEmpty()) {
             saved.setStatus("MATCHED");
             saved = lostRepo.save(saved);
+            matchingService.notifyMatchesForLost(saved, matches);
         }
         return saved;
     }
 
+    @Transactional
     public FoundItem createFound(FoundItem item, MultipartFile image, User reporter) {
         item.setReporter(reporter);
         item.setDateFound(LocalDate.now());
         item.setStatus("FOUND");
         item.setImagePath(fileStorageService.store(image));
         FoundItem saved = foundRepo.save(item);
-        if (!matchingService.findMatchesForFound(saved).isEmpty()) {
+        List<LostItem> matches = matchingService.findMatchesForFound(saved);
+        if (!matches.isEmpty()) {
             saved.setStatus("MATCHED");
             saved = foundRepo.save(saved);
+            matchingService.notifyMatchesForFound(saved, matches);
         }
         return saved;
     }
@@ -63,6 +70,14 @@ public class ItemService {
         return query == null || query.isBlank()
                 ? foundRepo.findAll()
                 : foundRepo.findByItemNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrLocationContainingIgnoreCase(query, query, query);
+    }
+
+    public List<LostItem> lostItemsFor(User user) {
+        return lostRepo.findByReporterIdOrderByDateLostDesc(user.getId());
+    }
+
+    public List<FoundItem> foundItemsFor(User user) {
+        return foundRepo.findByReporterIdOrderByDateFoundDesc(user.getId());
     }
 
     public LostItem lostById(Long id) {

@@ -1,33 +1,3 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-<div class="container">
-<h2>Login</h2>
-
-<!-- Error message -->
-<p th:if="${error}" th:text="${error}" style="color:red;"></p>
-
-<!-- Success message (after register or logout) -->
-<p th:if="${success}" th:text="${success}" style="color:green;"></p>
-
-<!-- Spring Security processes this POST automatically -->
-<form th:action="@{/api/login}" method="post">
-    <label>Username:</label>
-    <input type="text" name="username" required /><br/><br/>
-
-    <label>Password:</label>
-    <input type="password" name="password" required /><br/><br/>
-
-    <button type="submit">Login</button>
-</form>
-
-<br/>
-<a href="/api/register">Don't have an account? Register</a>
-</div>
-</body>
-</html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sign in | FindX</title><link rel="stylesheet" href="/css/style.css"><script defer src="/js/app.js"></script></head>
+<body class="page-bg auth-page"><div class="auth-layout"><section class="auth-aside"><a class="brand" href="/home"><span class="brand-mark">F</span><span>FIND<em>X</em><small>LOST TODAY. FOUND TOMORROW.</small></span></a><p class="eyebrow">WELCOME TO FINDX</p><h1>Every lost thing<br>has a way <span>home.</span></h1><p>Sign in to submit a private report, receive secure match alerts, and help reunite campus belongings with their owners.</p><a class="private-link" href="/home">← Back to home</a></section><main class="glass-card form-card"><h2>Welcome back!</h2><p>Sign in to your private account.</p><p class="form-alert error" role="alert" th:if="${error}" th:text="${error}"></p><p class="form-alert success" role="status" th:if="${success}" th:text="${success}"></p><form th:action="@{/api/login}" method="post"><label for="username">Email or username</label><div class="input-wrap"><input id="username" type="text" name="username" autocomplete="username" placeholder="Enter your email or username" required autofocus><span class="input-icon">✉</span></div><label for="password">Password</label><div class="input-wrap"><input id="password" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required><button class="password-toggle" type="button" data-password-toggle="#password" aria-label="Show password">◉</button></div><button class="gradient-button" type="submit">Sign in <span>→</span></button></form><p class="account-switch">Don't have an account? <a href="/api/register">Create account</a></p></main></div></body></html>

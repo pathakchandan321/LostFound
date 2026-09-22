@@ -8,6 +8,7 @@ import com.lostFound.lostFound.service.ChatbotService;
 import com.lostFound.lostFound.service.ClaimService;
 import com.lostFound.lostFound.service.ItemService;
 import com.lostFound.lostFound.service.UserService;
+import com.lostFound.lostFound.repository.NotificationRepo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +24,15 @@ public class MainController {
     private final ClaimService claimService;
     private final UserService userService;
     private final ChatbotService chatbotService;
+    private final NotificationRepo notificationRepo;
 
     public MainController(ItemService itemService, ClaimService claimService,
-                          UserService userService, ChatbotService chatbotService) {
+                          UserService userService, ChatbotService chatbotService, NotificationRepo notificationRepo) {
         this.itemService = itemService;
         this.claimService = claimService;
         this.userService = userService;
         this.chatbotService = chatbotService;
+        this.notificationRepo = notificationRepo;
     }
 
     @GetMapping("/")
@@ -41,6 +44,29 @@ public class MainController {
     public String index(Model model) {
         model.addAttribute("chatAnswer", null);
         return "index";
+    }
+
+    @GetMapping("/my-reports")
+    public String myReports(Authentication authentication, Model model) {
+        User user = currentUser(authentication);
+        model.addAttribute("profile", user);
+        model.addAttribute("lostItems", itemService.lostItemsFor(user));
+        model.addAttribute("foundItems", itemService.foundItemsFor(user));
+        model.addAttribute("notifications", notificationRepo.findByRecipientIdOrderByCreatedAtDesc(user.getId()));
+        model.addAttribute("claims", claimService.findFor(user));
+        return "dashboard";
+    }
+
+    @GetMapping("/profile")
+    public String profile(Authentication authentication, Model model) {
+        model.addAttribute("profile", currentUser(authentication));
+        return "profile";
+    }
+
+    @PostMapping("/profile/photo")
+    public String updateProfilePhoto(@RequestParam("image") MultipartFile image, Authentication authentication) {
+        userService.updateProfileImage(currentUser(authentication), image);
+        return "redirect:/profile";
     }
 
     // Report lost
@@ -56,7 +82,7 @@ public class MainController {
             Authentication authentication) {
 
         itemService.createLost(lostItem, file, currentUser(authentication));
-        return "redirect:/lost-items";
+        return "redirect:/my-reports";
     }
 
     // Report found (similar)
@@ -72,22 +98,17 @@ public class MainController {
             Authentication authentication) {
 
         itemService.createFound(foundItem, file, currentUser(authentication));
-        return "redirect:/found-items";
+        return "redirect:/my-reports";
     }
 
     @GetMapping("/lost-items")
     public String listLost(Model m, @RequestParam(value = "q", required = false) String q) {
-        m.addAttribute("lostItems", itemService.lostItems(q));
-        m.addAttribute("query", q);
-        return "lost_list";
+        return "redirect:/my-reports";
     }
 
     @GetMapping("/found-items")
     public String listFound(Model m, @RequestParam(value = "q", required = false) String q) {
-        m.addAttribute("foundItems", itemService.foundItems(q));
-        m.addAttribute("lostItems", itemService.lostItems(null));
-        m.addAttribute("query", q);
-        return "found_list";
+        return "redirect:/my-reports";
     }
 
     // Claim create
@@ -101,8 +122,7 @@ public class MainController {
 
     @GetMapping("/claims")
     public String listClaims(Model m) {
-        m.addAttribute("claims", claimService.findAll());
-        return "claim_list";
+        return "redirect:/my-reports";
     }
 
     // Admin approve/reject

@@ -48,8 +48,8 @@ public class ApiController {
     }
 
     @GetMapping("/lost-items")
-    public List<LostItemResponse> lostItems(@RequestParam(required = false) String q) {
-        return itemService.lostItems(q).stream().map(LostItemResponse::from).toList();
+    public List<LostItemResponse> lostItems(Authentication authentication) {
+        return itemService.lostItemsFor(currentUser(authentication)).stream().map(LostItemResponse::from).toList();
     }
 
     @PostMapping(value = "/lost-items", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -65,8 +65,8 @@ public class ApiController {
     }
 
     @GetMapping("/found-items")
-    public List<FoundItemResponse> foundItems(@RequestParam(required = false) String q) {
-        return itemService.foundItems(q).stream().map(FoundItemResponse::from).toList();
+    public List<FoundItemResponse> foundItems(Authentication authentication) {
+        return itemService.foundItemsFor(currentUser(authentication)).stream().map(FoundItemResponse::from).toList();
     }
 
     @PostMapping(value = "/found-items", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -82,8 +82,8 @@ public class ApiController {
     }
 
     @GetMapping("/claims")
-    public List<ClaimResponse> claims() {
-        return claimService.findAll().stream().map(ClaimResponse::from).toList();
+    public List<ClaimResponse> claims(Authentication authentication) {
+        return claimService.findFor(currentUser(authentication)).stream().map(ClaimResponse::from).toList();
     }
 
     @PostMapping("/claims")

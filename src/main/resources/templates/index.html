@@ -1,55 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="utf-8">
-    <title>Lost & Found</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-<div class="navbar">
-
-    <a href="/User/report-lost">Report Lost Item</a>
-    <a href="/User/report-found">Report Found Item</a>
-    <a href="/lost-items">Lost Items</a>
-    <a href="/found-items">Found Items</a>
-    <a href="/claims">Claims</a>
-    <a href="/admin">Admin</a>
-
-    <!-- 🔓 Agar user NOT logged in -->
-    <span sec:authorize="isAnonymous()">
-        <a th:href="@{/api/register}">SignUp</a>
-        <a th:href="@{/api/login}">Login</a>
-    </span>
-
-    <!-- 🔐 Agar user logged in hai -->
-    <span sec:authorize="isAuthenticated()">
-        <form th:action="@{/api/logout}" method="post" style="display:inline;">
-            <button type="submit">Logout</button>
-        </form>
-    </span>
-
-</div>
-
-<div class="container">
-    <h1>Welcome to Lost & Found Portal</h1>
-    <p class="lead">Post lost and found items, search campus reports, and track claims until an item is returned.</p>
-
-    <div class="actions">
-        <a class="button-link" href="/User/report-lost">Report Lost</a>
-        <a class="button-link" href="/User/report-found">Report Found</a>
-        <a class="button-link secondary" href="/found-items">Search Found Items</a>
-    </div>
-
-    <section class="chatbot">
-        <h2>Help Chatbot</h2>
-        <form th:action="@{/chat}" method="post">
-            <input type="text" name="message" placeholder="Ask how to report, claim, or track an item" required />
-            <button type="submit">Ask</button>
-        </form>
-        <p th:if="${chatAnswer != null}" class="answer" th:text="${chatAnswer}"></p>
-    </section>
-</div>
-
-</body>
-</html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FindX | Lost Yesterday. Found Today.</title><link rel="stylesheet" href="/css/style.css"></head>
+<body class="page-bg landing"><header class="nav-shell"><nav class="navbar" aria-label="Primary"><a class="brand" href="/home"><span class="brand-mark">F</span><span>FIND<em>X</em><small>LOST TODAY. FOUND TOMORROW.</small></span></a><div class="nav-links"><a href="/home">Home</a><a href="#about">About</a><a href="#how-it-works">How it works</a><a href="#features">Features</a><a href="#contact">Contact</a></div><a class="nav-cta" sec:authorize="isAnonymous()" href="/api/login">Get started →</a><a class="nav-cta" sec:authorize="isAuthenticated()" href="/my-reports">My dashboard →</a></nav></header>
+<main class="hero"><div class="orbit"></div><section class="hero-copy"><p class="eyebrow">A CLEANER, SAFER TOMORROW</p><h1>Lost Yesterday.<br>Found <span>Today.</span></h1><p id="about">FindX helps students reconnect with what matters. Submit a private report and our matching system securely identifies similar items without exposing your information.</p><div class="feature-row" id="features"><div><i>⌕</i><strong>Report</strong><span>Lost items</span></div><div><i>◇</i><strong>Find</strong><span>Found items</span></div><div><i>✦</i><strong>AI-powered</strong><span>Private matches</span></div><div><i>♢</i><strong>Safer</strong><span>Communities</span></div></div><div class="hero-actions" id="how-it-works"><a class="gradient-button" href="/User/report-lost">Report an item →</a><a class="ghost-button" href="/my-reports">⌕ Find an item</a></div><p class="quote">“Small things reunite big stories.”</p></section>
+<aside class="glass-card hero-auth" sec:authorize="isAnonymous()"><a class="brand" href="/home"><span class="brand-mark">F</span><span>FIND<em>X</em><small>LOST TODAY. FOUND TOMORROW.</small></span></a><h2>Welcome back!</h2><p class="card-subtitle">Sign in to your account</p><p class="card-copy">Access your private reports, similar-item alerts, and recovery updates.</p><a class="gradient-button" href="/api/login">Sign in →</a><p class="account-switch">Don't have an account? <a href="/api/register">Create account</a></p></aside>
+<aside class="glass-card hero-auth" sec:authorize="isAuthenticated()"><p class="eyebrow">YOUR PRIVATE SPACE</p><h2>Welcome to FindX</h2><p class="card-copy">Your reports and secure match notifications are ready in your dashboard.</p><a class="gradient-button" href="/my-reports">Open dashboard →</a><p class="account-switch"><a href="/User/report-found">Report a found item</a></p></aside></main>
+<footer class="site-footer" id="contact"><span>© FindX</span><a href="/home">Privacy</a><a href="/home">Terms</a><span>✦ A cleaner, safer tomorrow</span></footer></body></html>

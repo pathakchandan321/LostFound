@@ -27,6 +27,9 @@ public class ClaimService {
     public Claim create(Long lostId, Long foundId, User claimant, String message) {
         LostItem lost = lostRepo.findById(lostId).orElseThrow(() -> new ResourceNotFoundException("Lost item not found"));
         FoundItem found = foundRepo.findById(foundId).orElseThrow(() -> new ResourceNotFoundException("Found item not found"));
+        if (lost.getReporter() == null || !lost.getReporter().getId().equals(claimant.getId())) {
+            throw new ResourceNotFoundException("Lost item not found");
+        }
         Claim claim = new Claim();
         claim.setLostItem(lost);
         claim.setFoundItem(found);
@@ -41,6 +44,10 @@ public class ClaimService {
 
     public List<Claim> findAll() {
         return claimRepo.findAll();
+    }
+
+    public List<Claim> findFor(User user) {
+        return claimRepo.findByClaimantIdOrderByClaimedAtDesc(user.getId());
     }
 
     public Claim approve(Long id) {

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ClaimRepo extends JpaRepository<Claim, Long> {
     List<Claim> findByStatus(String status);
+    List<Claim> findByClaimantIdOrderByClaimedAtDesc(Long claimantId);
 }
