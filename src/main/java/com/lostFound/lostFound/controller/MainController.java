@@ -59,6 +59,7 @@ public class MainController {
         model.addAttribute("foundItems", itemService.foundItemsFor(user));
         model.addAttribute("notifications", notificationRepo.findByRecipientIdOrderByCreatedAtDesc(user.getId()));
         model.addAttribute("claims", claimService.findFor(user));
+        model.addAttribute("potentialMatches", itemService.potentialFoundItemsFor(user));
         model.addAttribute("successStoryService", successStoryService);
         return "dashboard";
     }
@@ -142,7 +143,7 @@ public class MainController {
                         @RequestParam(required = false) String message,
                         Authentication authentication) {
         claimService.create(lostId, foundId, currentUser(authentication), message);
-        return "redirect:/claims";
+        return "redirect:/my-reports";
     }
 
     @GetMapping("/claims")
@@ -154,13 +155,13 @@ public class MainController {
     @PostMapping("/admin/claim/{id}/approve")
     public String approve(@PathVariable Long id) {
         claimService.approve(id);
-        return "redirect:/claims";
+        return "redirect:/my-reports";
     }
 
     @PostMapping("/admin/claim/{id}/reject")
     public String reject(@PathVariable Long id) {
         claimService.reject(id);
-        return "redirect:/claims";
+        return "redirect:/my-reports";
     }
 
     @PostMapping("/admin/lost/{id}/delete")

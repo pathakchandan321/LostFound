@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Service
 public class ItemService {
@@ -78,6 +80,14 @@ public class ItemService {
 
     public List<FoundItem> foundItemsFor(User user) {
         return foundRepo.findByReporterIdOrderByDateFoundDesc(user.getId());
+    }
+
+    public List<FoundItem> potentialFoundItemsFor(User user) {
+        Map<Long, FoundItem> matches = new LinkedHashMap<>();
+        lostItemsFor(user).forEach(lost -> foundRepo
+                .findPotentialMatches(lost.getItemName(), lost.getLocation(), "RETURNED")
+                .forEach(found -> matches.put(found.getId(), found)));
+        return List.copyOf(matches.values());
     }
 
     public LostItem lostById(Long id) {

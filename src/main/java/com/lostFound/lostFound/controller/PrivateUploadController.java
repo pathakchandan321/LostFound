@@ -35,12 +35,30 @@ public class PrivateUploadController {
     public Resource upload(@PathVariable String fileName, Authentication authentication) {
         User user = users.currentOrAnonymous(authentication == null ? null : authentication.getName());
         boolean admin = "ADMIN".equalsIgnoreCase(user.getRole());
-        boolean owns = lostRepo.findByImagePath(fileName).map(item -> item.getReporter().getId().equals(user.getId())).orElse(false)
-                || foundRepo.findByImagePath(fileName).map(item -> item.getReporter().getId().equals(user.getId())).orElse(false)
+        boolean owns = lostRepo.findByImagePath(fileName)
+                .map(item -> item.getReporter() != null && item.getReporter().getId().equals(user.getId())).orElse(false)
+                || foundRepo.findByImagePath(fileName)
+                .map(item -> item.getReporter() != null && item.getReporter().getId().equals(user.getId())).orElse(false)
+                || foundRepo.findByImagePath(fileName).map(found -> lostRepo
+                .findByReporterIdOrderByDateLostDesc(user.getId()).stream()
+                .anyMatch(lost -> sameMatch(lost, found))).orElse(false)
                 || userRepo.findByProfileImage(fileName).map(profile -> profile.getId().equals(user.getId())).orElse(false);
         if (!admin && !owns) throw new ResourceNotFoundException("Image not found");
         Path path = storage.uploadPath().resolve(fileName).normalize();
         if (!path.startsWith(storage.uploadPath())) throw new ResourceNotFoundException("Image not found");
         return new FileSystemResource(path);
+    }
+
+    private boolean sameMatch(com.lostFound.lostFound.Entity.LostItem lost,
+                               com.lostFound.lostFound.Entity.FoundItem found) {
+        return "MATCHED".equals(lost.getStatus())
+                && (containsIgnoreCase(found.getItemName(), lost.getItemName())
+                || containsIgnoreCase(found.getLocation(), lost.getLocation()));
+    }
+
+    private boolean containsIgnoreCase(String value, String query) {
+        return value != null && query != null
+                && (value.toLowerCase().contains(query.toLowerCase())
+                || query.toLowerCase().contains(value.toLowerCase()));
     }
 }

@@ -120,6 +120,36 @@
                 </tr>
             </table>
         </section>
+        <section class="panel panel-wide"><h2>Potential matches</h2>
+            <p class="empty" th:if="${#lists.isEmpty(potentialMatches)}">
+                No matching found-item reports are available yet.
+            </p>
+            <table class="report-table" th:if="${!#lists.isEmpty(potentialMatches)}">
+                <tr><th>Found item</th><th>Location</th><th>Photo</th><th>Claim</th></tr>
+                <tr th:each="found : ${potentialMatches}">
+                    <td th:text="${found.itemName}">Found item</td>
+                    <td th:text="${found.location}">Location</td>
+                    <td>
+                        <a class="private-link" th:if="${found.imagePath != null}"
+                           th:href="@{'/private-uploads/' + ${found.imagePath}}">View private photo</a>
+                        <span th:if="${found.imagePath == null}">—</span>
+                    </td>
+                    <td>
+                        <form th:action="@{/claim}" method="post">
+                            <input type="hidden" name="foundId" th:value="${found.id}">
+                            <select name="lostId" required>
+                                <option th:each="lost : ${lostItems}"
+                                        th:if="${lost.status == 'MATCHED' or lost.status == 'LOST'}"
+                                        th:value="${lost.id}"
+                                        th:text="${lost.id + ' - ' + lost.itemName}">Lost item</option>
+                            </select>
+                            <input type="text" name="message" placeholder="Proof message" required>
+                            <button class="gradient-button" type="submit">Submit claim</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </section>
     </div>
 </main>
 </body>
