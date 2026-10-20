@@ -164,6 +164,12 @@ public class MainController {
         return "redirect:/my-reports";
     }
 
+    @PostMapping("/admin/claim/{id}/handover")
+    public String completeHandover(@PathVariable Long id) {
+        claimService.completeHandover(id);
+        return "redirect:/admin";
+    }
+
     @PostMapping("/admin/lost/{id}/delete")
     public String deleteLost(@PathVariable Long id) {
         itemService.deleteLost(id);

@@ -106,6 +106,11 @@ public class ApiController {
         return ClaimResponse.from(claimService.reject(id));
     }
 
+    @PostMapping("/admin/claims/{id}/handover")
+    public ClaimResponse handover(@PathVariable Long id) {
+        return ClaimResponse.from(claimService.completeHandover(id));
+    }
+
     @GetMapping("/admin/users")
     public List<UserResponse> users() {
         return userService.findAll().stream().map(this::toUser).toList();

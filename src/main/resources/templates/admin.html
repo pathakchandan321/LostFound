@@ -37,15 +37,19 @@
     </tr>
 </table>
 
-<h2>Claims</h2>
+<h2>Claims and handovers</h2>
+<p>Approve or reject pending claims. After the claimant collects the item from you, mark the approved claim as handed over.</p>
 <table>
-    <tr><th>ID</th><th>Status</th><th>Action</th></tr>
+    <tr><th>ID</th><th>Lost item</th><th>Found item</th><th>Status</th><th>Action</th></tr>
     <tr th:each="c : ${claims}">
         <td th:text="${c.id}"></td>
+        <td th:text="${c.lostItem != null ? c.lostItem.itemName : '—'}"></td>
+        <td th:text="${c.foundItem != null ? c.foundItem.itemName : '—'}"></td>
         <td th:text="${c.status}"></td>
         <td>
-            <form th:action="@{|/admin/claim/${c.id}/approve|}" method="post" style="display:inline;"><button type="submit">Approve</button></form>
-            <form th:action="@{|/admin/claim/${c.id}/reject|}" method="post" style="display:inline;"><button type="submit">Reject</button></form>
+            <form th:if="${c.status == 'PENDING'}" th:action="@{|/admin/claim/${c.id}/approve|}" method="post" style="display:inline;"><button type="submit">Approve</button></form>
+            <form th:if="${c.status == 'PENDING'}" th:action="@{|/admin/claim/${c.id}/reject|}" method="post" style="display:inline;"><button type="submit">Reject</button></form>
+            <form th:if="${c.status == 'APPROVED' or c.status == 'HANDOVER_PENDING'}" th:action="@{|/admin/claim/${c.id}/handover|}" method="post" style="display:inline;"><button type="submit">Mark handed over</button></form>
             <form th:action="@{|/admin/claim/${c.id}/delete|}" method="post" style="display:inline;"><button type="submit">Delete</button></form>
         </td>
     </tr>

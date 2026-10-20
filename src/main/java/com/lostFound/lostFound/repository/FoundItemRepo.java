@@ -16,8 +16,7 @@ public interface FoundItemRepo extends JpaRepository<FoundItem, Long> {
     Optional<FoundItem> findByImagePath(String imagePath);
     @Query("select f from FoundItem f where (lower(f.itemName) like lower(concat('%', :name, '%')) " +
             "or lower(f.description) like lower(concat('%', :description, '%')) " +
-            "or lower(f.location) like lower(concat('%', :location, '%'))) and f.status <> :status")
+            "or lower(f.location) like lower(concat('%', :location, '%'))) and f.status in ('FOUND', 'MATCHED')")
     List<FoundItem> findPotentialMatches(@Param("name") String name, @Param("description") String description,
-                                         @Param("location") String location,
-                                         @Param("status") String status);
+                                         @Param("location") String location);
 }

@@ -130,7 +130,7 @@ Change or remove these credentials before deploying to a shared or production en
 3. Both item records move to `CLAIMED` and the claim is created as `PENDING`.
 4. An administrator reviews the claim.
 5. Approved claims move both items to `RETURNED`; rejected claims return them to `MATCHED`.
-6. After an approved return, the found-item reporter can publish an optional photo and story on the landing page.
+6. After approval, the claimant collects the item from the admin; the admin marks the claim as handed over, which removes the item from matching and unlocks the found-item reporter's optional photo and story for the landing page.
 
 ## Statuses
 

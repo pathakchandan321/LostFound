@@ -17,7 +17,7 @@ public class Claim {
 
     @Column(length = 1000)
     private String message;
-    private String status = "PENDING"; // PENDING, APPROVED, REJECTED
+    private String status = "PENDING"; // PENDING, REJECTED, HANDOVER_PENDING, HANDOVER_COMPLETED
     private LocalDateTime claimedAt = LocalDateTime.now();
 
     public Long getId() {
@@ -78,4 +78,3 @@ public class Claim {
 
     // getters & setters
 }
-

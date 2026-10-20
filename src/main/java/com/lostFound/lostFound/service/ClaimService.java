@@ -9,6 +9,7 @@ import com.lostFound.lostFound.repository.ClaimRepo;
 import com.lostFound.lostFound.repository.FoundItemRepo;
 import com.lostFound.lostFound.repository.LostItemRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,11 +25,25 @@ public class ClaimService {
         this.foundRepo = foundRepo;
     }
 
+    @Transactional
     public Claim create(Long lostId, Long foundId, User claimant, String message) {
         LostItem lost = lostRepo.findById(lostId).orElseThrow(() -> new ResourceNotFoundException("Lost item not found"));
         FoundItem found = foundRepo.findById(foundId).orElseThrow(() -> new ResourceNotFoundException("Found item not found"));
         if (lost.getReporter() == null || !lost.getReporter().getId().equals(claimant.getId())) {
             throw new ResourceNotFoundException("Lost item not found");
+        }
+        if (!("LOST".equals(lost.getStatus()) || "MATCHED".equals(lost.getStatus()))
+                || !("FOUND".equals(found.getStatus()) || "MATCHED".equals(found.getStatus()))) {
+            throw new IllegalArgumentException("This item is no longer available for claiming");
+        }
+        if (claimRepo.findByClaimantIdOrFoundItemReporterIdOrderByClaimedAtDesc(claimant.getId(), claimant.getId())
+                .stream()
+                .anyMatch(existing -> existing.getLostItem() != null
+                        && existing.getFoundItem() != null
+                        && existing.getLostItem().getId().equals(lostId)
+                        && existing.getFoundItem().getId().equals(foundId)
+                        && !"REJECTED".equals(existing.getStatus()))) {
+            throw new IllegalArgumentException("A claim already exists for this item");
         }
         Claim claim = new Claim();
         claim.setLostItem(lost);
@@ -50,9 +65,31 @@ public class ClaimService {
         return claimRepo.findByClaimantIdOrFoundItemReporterIdOrderByClaimedAtDesc(user.getId(), user.getId());
     }
 
+    @Transactional
     public Claim approve(Long id) {
         Claim claim = get(id);
-        claim.setStatus("APPROVED");
+        if (!"PENDING".equals(claim.getStatus())) {
+            throw new IllegalArgumentException("Only pending claims can be approved");
+        }
+        claim.setStatus("HANDOVER_PENDING");
+        if (claim.getLostItem() != null) {
+            claim.getLostItem().setStatus("CLAIMED");
+            lostRepo.save(claim.getLostItem());
+        }
+        if (claim.getFoundItem() != null) {
+            claim.getFoundItem().setStatus("CLAIMED");
+            foundRepo.save(claim.getFoundItem());
+        }
+        return claimRepo.save(claim);
+    }
+
+    @Transactional
+    public Claim completeHandover(Long id) {
+        Claim claim = get(id);
+        if (!("APPROVED".equals(claim.getStatus()) || "HANDOVER_PENDING".equals(claim.getStatus()))) {
+            throw new IllegalArgumentException("Only approved claims can be handed over");
+        }
+        claim.setStatus("HANDOVER_COMPLETED");
         if (claim.getLostItem() != null) {
             claim.getLostItem().setStatus("RETURNED");
             lostRepo.save(claim.getLostItem());
@@ -66,6 +103,9 @@ public class ClaimService {
 
     public Claim reject(Long id) {
         Claim claim = get(id);
+        if (!"PENDING".equals(claim.getStatus())) {
+            throw new IllegalArgumentException("Only pending claims can be rejected");
+        }
         claim.setStatus("REJECTED");
         if (claim.getLostItem() != null) {
             claim.getLostItem().setStatus("MATCHED");

@@ -16,7 +16,7 @@ public class ChatbotService {
             return "To claim an item, open Found Items, choose the matching found item, provide your lost item ID and a short proof message. An admin will approve or reject the claim.";
         }
         if (text.contains("status") || text.contains("track")) {
-            return "Statuses mean: LOST or FOUND is newly posted, MATCHED has similar items, CLAIMED is waiting for admin review, and RETURNED means the claim was approved.";
+            return "Statuses mean: LOST or FOUND is newly posted, MATCHED has similar items, CLAIMED is under review, HANDOVER_PENDING means the admin approved collection, HANDOVER_COMPLETED means the item was handed over, and RETURNED means it is no longer available.";
         }
         if (text.contains("admin")) {
             return "Admins can review claims, approve or reject them, and manage users and item posts from the Admin page.";

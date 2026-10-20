@@ -113,9 +113,10 @@
                     <td><span class="status" th:text="${claim.status}">PENDING</span></td>
                     <td>
                         <a class="gradient-button"
-                           th:if="${claim.status == 'APPROVED' and claim.foundItem != null and claim.foundItem.reporter != null and claim.foundItem.reporter.id == profile.id and successStoryService.canSubmit(claim.id, profile)}"
+                           th:if="${claim.status == 'HANDOVER_COMPLETED' and claim.foundItem != null and claim.foundItem.reporter != null and claim.foundItem.reporter.id == profile.id and successStoryService.canSubmit(claim.id, profile)}"
                            th:href="@{|/success-story/${claim.id}|}">Share your story</a>
-                        <span th:if="${claim.status == 'APPROVED' and !(claim.foundItem != null and claim.foundItem.reporter != null and claim.foundItem.reporter.id == profile.id)}">Return confirmed</span>
+                        <span th:if="${claim.status == 'HANDOVER_COMPLETED'}">Handover completed</span>
+                        <span th:if="${claim.status == 'APPROVED' or claim.status == 'HANDOVER_PENDING'}">Approved — collect from admin</span>
                     </td>
                 </tr>
             </table>

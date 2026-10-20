@@ -30,7 +30,7 @@ public class SuccessStoryService {
 
     public boolean canSubmit(Long claimId, User author) {
         return claimRepo.findById(claimId)
-                .filter(claim -> "APPROVED".equals(claim.getStatus()))
+                .filter(claim -> "HANDOVER_COMPLETED".equals(claim.getStatus()))
                 .filter(claim -> claim.getFoundItem() != null && claim.getFoundItem().getReporter() != null)
                 .filter(claim -> claim.getFoundItem().getReporter().getId().equals(author.getId()))
                 .filter(claim -> storyRepo.findByClaimId(claimId).isEmpty())
@@ -40,7 +40,7 @@ public class SuccessStoryService {
     public SuccessStory create(Long claimId, String storyText, MultipartFile image, User author) {
         Claim claim = claimRepo.findById(claimId)
                 .orElseThrow(() -> new ResourceNotFoundException("Claim not found"));
-        if (!"APPROVED".equals(claim.getStatus())
+        if (!"HANDOVER_COMPLETED".equals(claim.getStatus())
                 || claim.getFoundItem() == null
                 || claim.getFoundItem().getReporter() == null
                 || !claim.getFoundItem().getReporter().getId().equals(author.getId())) {
