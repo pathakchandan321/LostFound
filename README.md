@@ -11,6 +11,7 @@ FindX is a secure, web-based lost-and-found platform for colleges and campuses. 
 - Notifications for potentially matching reports
 - Claim submission with verification messages
 - Admin approval and rejection workflow
+- Returned-item success stories with optional public photos
 - Item, claim, and user status tracking
 - Rule-based FAQ chatbot
 - Server-rendered web interface with Thymeleaf
@@ -129,6 +130,7 @@ Change or remove these credentials before deploying to a shared or production en
 3. Both item records move to `CLAIMED` and the claim is created as `PENDING`.
 4. An administrator reviews the claim.
 5. Approved claims move both items to `RETURNED`; rejected claims return them to `MATCHED`.
+6. After an approved return, the found-item reporter can publish an optional photo and story on the landing page.
 
 ## Statuses
 
