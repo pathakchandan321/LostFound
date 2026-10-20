@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Share your story | FindX</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-bg">
+<header class="nav-shell"><nav class="navbar">
+    <a class="brand" href="/home"><span class="brand-mark">F</span><span>FIND<em>X</em><small>LOST TODAY. FOUND TOMORROW.</small></span></a>
+    <a class="ghost-button" href="/my-reports">← My dashboard</a>
+</nav></header>
+<main class="form-page"><div class="form-shell">
+    <div class="form-title">
+        <p class="eyebrow">A STORY WORTH SHARING</p>
+        <h1>Celebrate the return</h1>
+        <p>Share how returning this item made a difference. Your story will appear on the FindX landing page.</p>
+    </div>
+    <form class="glass-card report-form" th:action="@{|/success-story/${claimId}|}" method="post" enctype="multipart/form-data">
+        <label class="full">Your story
+            <textarea name="story" maxlength="2000" placeholder="Tell the FindX community what happened..." required></textarea>
+        </label>
+        <label class="full dropzone">Add a photo (optional)
+            <input type="file" name="image" accept="image/*" data-image-preview="#story-preview">
+            <img id="story-preview" class="image-preview" alt="Selected story image preview">
+        </label>
+        <button class="gradient-button" type="submit">Publish my story →</button>
+    </form>
+</div></main>
+</body>
+</html>

@@ -8,6 +8,7 @@ import com.lostFound.lostFound.service.ChatbotService;
 import com.lostFound.lostFound.service.ClaimService;
 import com.lostFound.lostFound.service.ItemService;
 import com.lostFound.lostFound.service.UserService;
+import com.lostFound.lostFound.service.SuccessStoryService;
 import com.lostFound.lostFound.repository.NotificationRepo;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -25,14 +26,17 @@ public class MainController {
     private final UserService userService;
     private final ChatbotService chatbotService;
     private final NotificationRepo notificationRepo;
+    private final SuccessStoryService successStoryService;
 
     public MainController(ItemService itemService, ClaimService claimService,
-                          UserService userService, ChatbotService chatbotService, NotificationRepo notificationRepo) {
+                          UserService userService, ChatbotService chatbotService, NotificationRepo notificationRepo,
+                          SuccessStoryService successStoryService) {
         this.itemService = itemService;
         this.claimService = claimService;
         this.userService = userService;
         this.chatbotService = chatbotService;
         this.notificationRepo = notificationRepo;
+        this.successStoryService = successStoryService;
     }
 
     @GetMapping("/")
@@ -43,6 +47,7 @@ public class MainController {
     @GetMapping("/home")
     public String index(Model model) {
         model.addAttribute("chatAnswer", null);
+        model.addAttribute("successStories", successStoryService.findAll());
         return "index";
     }
 
@@ -54,7 +59,27 @@ public class MainController {
         model.addAttribute("foundItems", itemService.foundItemsFor(user));
         model.addAttribute("notifications", notificationRepo.findByRecipientIdOrderByCreatedAtDesc(user.getId()));
         model.addAttribute("claims", claimService.findFor(user));
+        model.addAttribute("successStoryService", successStoryService);
         return "dashboard";
+    }
+
+    @GetMapping("/success-story/{claimId}")
+    public String successStoryForm(@PathVariable Long claimId, Authentication authentication, Model model) {
+        User user = currentUser(authentication);
+        if (!successStoryService.canSubmit(claimId, user)) {
+            throw new com.lostFound.lostFound.exception.ResourceNotFoundException("Success story not found");
+        }
+        model.addAttribute("claimId", claimId);
+        return "success_story_form";
+    }
+
+    @PostMapping("/success-story/{claimId}")
+    public String submitSuccessStory(@PathVariable Long claimId,
+                                     @RequestParam String story,
+                                     @RequestParam(value = "image", required = false) MultipartFile image,
+                                     Authentication authentication) {
+        successStoryService.create(claimId, story, image, currentUser(authentication));
+        return "redirect:/my-reports";
     }
 
     @GetMapping("/profile")

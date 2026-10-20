@@ -47,7 +47,7 @@ public class ClaimService {
     }
 
     public List<Claim> findFor(User user) {
-        return claimRepo.findByClaimantIdOrderByClaimedAtDesc(user.getId());
+        return claimRepo.findByClaimantIdOrFoundItemReporterIdOrderByClaimedAtDesc(user.getId(), user.getId());
     }
 
     public Claim approve(Long id) {
