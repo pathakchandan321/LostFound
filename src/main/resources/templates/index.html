@@ -45,12 +45,15 @@
                 class="gradient-button" href="/my-reports">Open dashboard →</a>
         <p class="account-switch"><a href="/User/report-found">Report a found item</a></p></aside>
 </main>
-<section class="dashboard-shell" th:if="${successStories != null and !#lists.isEmpty(successStories)}">
+<section class="dashboard-shell">
     <div class="dashboard-header">
-        <div><p class="eyebrow">COMMUNITY STORIES</p><h2>Returned with care</h2>
+        <div><p class="eyebrow">WALL OF HONESTY</p><h2>Returned with care</h2>
             <p>Real moments of kindness from the FindX community.</p></div>
     </div>
     <div class="dashboard-grid">
+        <p class="empty" th:if="${successStories == null or #lists.isEmpty(successStories)}">
+            Stories from people who return lost items will appear here.
+        </p>
         <article class="panel" th:each="story : ${successStories}">
             <img th:if="${story.imagePath != null}" th:src="@{'/story-uploads/' + ${story.imagePath}}"
                  alt="Community success story" style="width:100%;max-height:260px;object-fit:cover;border-radius:14px">

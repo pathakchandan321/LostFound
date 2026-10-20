@@ -85,7 +85,7 @@ public class ItemService {
     public List<FoundItem> potentialFoundItemsFor(User user) {
         Map<Long, FoundItem> matches = new LinkedHashMap<>();
         lostItemsFor(user).forEach(lost -> foundRepo
-                .findPotentialMatches(lost.getItemName(), lost.getLocation(), "RETURNED")
+                .findPotentialMatches(lost.getItemName(), lost.getDescription(), lost.getLocation(), "RETURNED")
                 .forEach(found -> matches.put(found.getId(), found)));
         return List.copyOf(matches.values());
     }

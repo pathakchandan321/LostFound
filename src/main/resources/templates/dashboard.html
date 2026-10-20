@@ -120,9 +120,9 @@
                 </tr>
             </table>
         </section>
-        <section class="panel panel-wide"><h2>Potential matches</h2>
+        <section class="panel panel-wide"><h2>Matched items — claim or verify</h2>
             <p class="empty" th:if="${#lists.isEmpty(potentialMatches)}">
-                No matching found-item reports are available yet.
+                Your match may still be processing. Refresh this dashboard after opening the notification.
             </p>
             <table class="report-table" th:if="${!#lists.isEmpty(potentialMatches)}">
                 <tr><th>Found item</th><th>Location</th><th>Photo</th><th>Claim</th></tr>
