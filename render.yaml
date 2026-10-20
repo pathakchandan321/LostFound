@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: findx-lost-found
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: PGHOST
+        fromDatabase:
+          name: findx-postgres
+          property: host
+      - key: PGPORT
+        fromDatabase:
+          name: findx-postgres
+          property: port
+      - key: PGDATABASE
+        fromDatabase:
+          name: findx-postgres
+          property: database
+      - key: PGUSER
+        fromDatabase:
+          name: findx-postgres
+          property: user
+      - key: PGPASSWORD
+        fromDatabase:
+          name: findx-postgres
+          property: password
+
+databases:
+  - name: findx-postgres
+    plan: free
+    databaseName: lost_found_db
+    user: lost_found_user
